@@ -2,7 +2,7 @@
 # shares must be bought in full
 # 500euros max
 import csv
-from typing import Dict, List, Tuple
+from typing import Dict, List
 
 CSV_FILE = "csv/shares.csv"
 MAX_COST = 500
@@ -26,20 +26,19 @@ def csv_to_dict(file: str) -> List[Dict[str, str]]:
     return shares
 
 
-def extract_shares_cost(shares: List[Dict[str, str]]) -> Dict[str, int]:
-    """Extrat each share cost and register them in Dict
+def extract_shares_cost(shares: List[Dict[str, str]]) -> List[int]:
+    """Extract each share cost and create a List
 
     Args:
-        shares (List[Dict[str, str]]): list of dict generated from csv_to_dict func
+        shares (List[Dict[str, str]]): list of Dict from csv_to_dic func
 
     Returns:
-        Dict[str, int]: Dict with Action-#: cost
+        List[int]: list of share cost
     """
-    shares_cost: List[Tuple[str, int]] = []
+    shares_cost: List[int] = []
     for share in shares:
-        share_cost = (share["shares"], int(share["cost_per_share"]))
-        shares_cost.append(share_cost)
-    return dict(shares_cost)
+        shares_cost.append(int(share["cost_per_share"]))
+    return shares_cost
 
 
 shares_dict = csv_to_dict(CSV_FILE)
