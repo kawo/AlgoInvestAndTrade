@@ -2,6 +2,8 @@
 # shares must be bought in full
 # 500euros max
 import csv
+import itertools
+import timeit
 from typing import Dict, List
 
 CSV_FILE = "csv/shares.csv"
@@ -41,6 +43,40 @@ def extract_shares_cost(shares: List[Dict[str, str]]) -> List[int]:
     return shares_cost
 
 
-shares_dict = csv_to_dict(CSV_FILE)
+def shares_combinations(shares: List[int], budget: int):
+    combs_list = []
+    combs_length = len(shares)
+    for i in range(1, (combs_length + 1)):
+        comb = [c for c in itertools.combinations(shares, i) if sum(c) <= budget]
+        combs_list.append(comb)
+    combs_unique = []
+    result = [
+        x for x in combs_list if x not in combs_unique and not combs_unique.append(x)
+    ]
+    print("Length of original comb:", len(combs_list))
+    print("Length w/o duplicates:", len(result))
+    return result
 
-print(extract_shares_cost(shares_dict))
+
+def comb_time():
+    SETUP_CODE = """
+from __main__ import csv_to_dict
+from __main__ import extract_shares_cost
+from __main__ import shares_combinations
+import csv
+import itertools
+from typing import Dict, List
+CSV_FILE = "csv/shares.csv"
+MAX_COST = 500
+shares_dict = csv_to_dict(CSV_FILE)
+shares_cost = extract_shares_cost(shares_dict)"""
+    TEST_CODE = """
+shares_combinations(shares_cost, MAX_COST)"""
+
+    times = timeit.timeit(stmt=TEST_CODE, setup=SETUP_CODE, number=1)
+
+    return print("Combs calc time:", times)
+
+
+if __name__ == "__main__":
+    comb_time()
