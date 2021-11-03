@@ -4,7 +4,9 @@
 import csv
 import itertools
 import timeit
-from typing import Dict, List
+from typing import Dict, List, Tuple
+
+import pandas as pd
 
 CSV_FILE = "csv/shares.csv"
 MAX_COST = 500
@@ -43,16 +45,19 @@ def extract_shares_cost(shares: List[Dict[str, str]]) -> List[int]:
     return shares_cost
 
 
-def shares_combinations(shares: List[int], budget: int):
-    combs_list = []
+def shares_combinations(shares: List[int], budget: int) -> List[Tuple[int, ...]]:
+    combs_list: List[Tuple[int, ...]] = []
     combs_length = len(shares)
     for i in range(1, (combs_length + 1)):
-        comb = [c for c in itertools.combinations(shares, i) if sum(c) <= budget]
+        comb: List[Tuple[int, ...]] = [
+            c for c in itertools.combinations(shares, i) if sum(c) <= budget
+        ]
         combs_list.append(comb)
-    combs_unique = []
-    result = [
+    combs_unique: List[Tuple[int, ...]] = []
+    result: List[Tuple[int, ...]] = [
         x for x in combs_list if x not in combs_unique and not combs_unique.append(x)
     ]
+    result = list(filter(None, result))
     print("Length of original comb:", len(combs_list))
     print("Length w/o duplicates:", len(result))
     return result
@@ -79,4 +84,13 @@ shares_combinations(shares_cost, MAX_COST)"""
 
 
 if __name__ == "__main__":
-    comb_time()
+
+    # comb_time()
+
+    shares_dict = csv_to_dict(CSV_FILE)
+    shares_cost = extract_shares_cost(shares_dict)
+    results = shares_combinations(shares_cost, MAX_COST)
+
+    df = pd.DataFrame.from_records(results)
+
+    print(df)
