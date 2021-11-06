@@ -3,10 +3,9 @@
 # 500euros max
 import csv
 import itertools
+import math
 import timeit
-from typing import Dict, List, Tuple
-
-import pandas as pd
+from typing import Any, Dict, List, Tuple
 
 CSV_FILE = "csv/shares.csv"
 MAX_COST = 500
@@ -30,19 +29,24 @@ def csv_to_dict(file: str) -> List[Dict[str, str]]:
     return shares
 
 
-def extract_shares_cost(shares: List[Dict[str, str]]) -> List[int]:
-    """Extract each share cost and create a List
+def shares_to_centimes(shares: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Convert costs to centimes and append profit value
 
     Args:
-        shares (List[Dict[str, str]]): list of Dict from csv_to_dic func
+        shares (List[Dict[str, Any]]): a list of dict with shares
 
     Returns:
-        List[int]: list of share cost
+        List[Dict[str, Any]]: a list of dict converted to int in centimes
     """
-    shares_cost: List[int] = []
     for share in shares:
-        shares_cost.append(int(share["cost_per_share"]))
-    return shares_cost
+        share["profit"] = share["profit"].replace("%", "").replace(" ", "")
+        share["profit"] = int(share["profit"])
+        share["cost_per_share"] = int(share["cost_per_share"])
+        share["profit_value"] = math.ceil(
+            (share["cost_per_share"] * share["profit"]) / 100
+        )
+        print(share)
+    return shares
 
 
 def shares_combinations(shares: List[int], budget: int) -> List[Tuple[int, ...]]:
@@ -88,9 +92,7 @@ if __name__ == "__main__":
     # comb_time()
 
     shares_dict = csv_to_dict(CSV_FILE)
-    shares_cost = extract_shares_cost(shares_dict)
-    results = shares_combinations(shares_cost, MAX_COST)
+    shares = shares_to_centimes(shares_dict)
+    # results = shares_combinations(shares_cost, MAX_COST)
 
-    df = pd.DataFrame.from_records(results)
-
-    print(df)
+    print(shares)
