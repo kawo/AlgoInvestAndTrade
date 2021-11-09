@@ -3,7 +3,6 @@
 # 500euros max
 import csv
 import itertools
-import math
 import timeit
 from typing import Any, Dict, List, Tuple
 
@@ -29,42 +28,39 @@ def csv_to_dict(file: str) -> List[Dict[str, str]]:
     return shares
 
 
-def shares_to_centimes(shares: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    """Convert costs to centimes and append profit value
+def append_profit_value(shares: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Calculate and append profit value for each share
 
     Args:
         shares (List[Dict[str, Any]]): a list of dict with shares
 
     Returns:
-        List[Dict[str, Any]]: a list of dict converted to int in centimes
+        List[Dict[str, Any]]: the initial list with profit value in it
     """
     for share in shares:
         share["profit"] = share["profit"].replace("%", "").replace(" ", "")
         share["profit"] = int(share["profit"])
         share["cost_per_share"] = int(share["cost_per_share"])
-        share["profit_value"] = math.ceil(
-            (share["cost_per_share"] * share["profit"]) / 100
-        )
-        print(share)
+        share["profit_value"] = (share["cost_per_share"] * share["profit"]) / 100
     return shares
 
 
-def shares_combinations(shares: List[int], budget: int) -> List[Tuple[int, ...]]:
-    combs_list: List[Tuple[int, ...]] = []
-    combs_length = len(shares)
-    for i in range(1, (combs_length + 1)):
-        comb: List[Tuple[int, ...]] = [
-            c for c in itertools.combinations(shares, i) if sum(c) <= budget
-        ]
-        combs_list.append(comb)
-    combs_unique: List[Tuple[int, ...]] = []
-    result: List[Tuple[int, ...]] = [
-        x for x in combs_list if x not in combs_unique and not combs_unique.append(x)
-    ]
-    result = list(filter(None, result))
-    print("Length of original comb:", len(combs_list))
-    print("Length w/o duplicates:", len(result))
-    return result
+def shares_combinations(shares, budget):
+    results = itertools.combinations(shares, 4)
+    best_comb = ["temp"]
+    best_profit = 0
+    for result in results:
+        result_len = len(result)
+        cost = 0
+        profit = 0
+        for i in range(0, result_len):
+            cost += result[i]["cost_per_share"]
+            profit += result[i]["profit_value"]
+        if cost <= budget:
+            if profit > best_profit:
+                best_profit = profit
+                best_comb[0] = result
+    return best_comb
 
 
 def comb_time():
@@ -92,7 +88,15 @@ if __name__ == "__main__":
     # comb_time()
 
     shares_dict = csv_to_dict(CSV_FILE)
-    shares = shares_to_centimes(shares_dict)
-    # results = shares_combinations(shares_cost, MAX_COST)
-
-    print(shares)
+    shares = append_profit_value(shares_dict)
+    results = shares_combinations(shares, MAX_COST)
+    results_len = len(results[0])
+    print("\nBest combination is:\n")
+    cost = 0
+    profit = 0
+    for i in range(0, results_len):
+        cost += results[0][i]["cost_per_share"]
+        profit += results[0][i]["profit_value"]
+        print(f"{results[0][i]['shares']}")
+    print(f"\nTotal cost: {cost}\n")
+    print(f"Total profit: {profit}\n")
