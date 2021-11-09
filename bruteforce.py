@@ -45,21 +45,44 @@ def append_profit_value(shares: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     return shares
 
 
-def shares_combinations(shares, budget):
-    results = itertools.combinations(shares, 4)
+def find_best_comb(combs, budget, final: bool = False):
     best_comb = ["temp"]
     best_profit = 0
-    for result in results:
-        result_len = len(result)
-        cost = 0
-        profit = 0
-        for i in range(0, result_len):
-            cost += result[i]["cost_per_share"]
-            profit += result[i]["profit_value"]
-        if cost <= budget:
-            if profit > best_profit:
-                best_profit = profit
-                best_comb[0] = result
+    final = final
+    if final:
+        combs_len = len(combs)
+        print(combs_len)
+        for i in range(0, combs_len):
+            for comb in combs:
+                comb_len = len(comb)
+                print(comb_len)
+                for j in range(0, comb_len):
+                    print(comb[i][j])
+    else:
+        for comb in combs:
+            comb_len = len(comb)
+            cost = 0
+            profit = 0
+            for i in range(0, comb_len):
+                cost += comb[i]["cost_per_share"]
+                profit += comb[i]["profit_value"]
+            if cost <= budget:
+                if profit > best_profit:
+                    best_profit = profit
+                    best_comb[0] = comb
+    if best_comb[0] != "temp":
+        return best_comb
+
+
+def shares_combinations(shares, budget):
+    shares_len = len(shares)
+    best_combs = []
+    best_comb = []
+    for i in range(1, (shares_len + 1)):
+        combs = itertools.combinations(shares, i)
+        best_combs.append(find_best_comb(combs, budget))
+    best_combs = list(filter(None, best_combs))
+    best_comb = find_best_comb(best_combs, budget, True)
     return best_comb
 
 
@@ -90,7 +113,8 @@ if __name__ == "__main__":
     shares_dict = csv_to_dict(CSV_FILE)
     shares = append_profit_value(shares_dict)
     results = shares_combinations(shares, MAX_COST)
-    results_len = len(results[0])
+    print(results)
+    """results_len = len(results[0])
     print("\nBest combination is:\n")
     cost = 0
     profit = 0
@@ -99,4 +123,4 @@ if __name__ == "__main__":
         profit += results[0][i]["profit_value"]
         print(f"{results[0][i]['shares']}")
     print(f"\nTotal cost: {cost}\n")
-    print(f"Total profit: {profit}\n")
+    print(f"Total profit: {profit}\n")"""
