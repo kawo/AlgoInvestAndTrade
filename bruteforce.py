@@ -38,7 +38,7 @@ def append_profit_value(shares: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         share["profit"] = share["profit"].replace("%", "").replace(" ", "")
         share["profit"] = int(share["profit"])
         share["cost_per_share"] = int(share["cost_per_share"])
-        share["profit_value"] = (share["cost_per_share"] * share["profit"]) / 100
+        share["profit_value"] = share["cost_per_share"] * share["profit"]
     return shares
 
 
@@ -144,4 +144,4 @@ if __name__ == "__main__":
         profit += results[0][i]["profit_value"]
         print(f"{results[0][i]['shares']}")
     print(f"\nTotal cost: {cost}\n")
-    print(f"Total profit: {profit}\n")
+    print(f"Total profit: {profit / 100}\n")
