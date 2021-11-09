@@ -110,17 +110,18 @@ def shares_combinations(shares: List[Dict[str, Any]], budget: int) -> List[str]:
 def comb_time():
     SETUP_CODE = """
 from __main__ import csv_to_dict
-from __main__ import extract_shares_cost
+from __main__ import append_profit_value
+from __main__ import find_best_comb
 from __main__ import shares_combinations
 import csv
 import itertools
-from typing import Dict, List
+from typing import Any, Dict, List
 CSV_FILE = "csv/shares.csv"
 MAX_COST = 500
 shares_dict = csv_to_dict(CSV_FILE)
-shares_cost = extract_shares_cost(shares_dict)"""
+shares = append_profit_value(shares_dict)"""
     TEST_CODE = """
-shares_combinations(shares_cost, MAX_COST)"""
+shares_combinations(shares, MAX_COST)"""
 
     times = timeit.timeit(stmt=TEST_CODE, setup=SETUP_CODE, number=1)
 
