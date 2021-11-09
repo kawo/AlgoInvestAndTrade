@@ -125,12 +125,12 @@ shares_combinations(shares, MAX_COST)"""
 
     times = timeit.timeit(stmt=TEST_CODE, setup=SETUP_CODE, number=1)
 
-    return print("Combs calc time:", times)
+    return print(f"\nCombs calc time: {times}s")
 
 
 if __name__ == "__main__":
 
-    # comb_time()
+    comb_time()
 
     shares_dict = csv_to_dict(CSV_FILE)
     shares = append_profit_value(shares_dict)
