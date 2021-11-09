@@ -50,14 +50,17 @@ def find_best_comb(combs, budget, final: bool = False):
     best_profit = 0
     final = final
     if final:
-        combs_len = len(combs)
-        print(combs_len)
-        for i in range(0, combs_len):
-            for comb in combs:
-                comb_len = len(comb)
-                print(comb_len)
-                for j in range(0, comb_len):
-                    print(comb[i][j])
+        for comb in combs:
+            comb_len = len(comb[0])
+            cost = 0
+            profit = 0
+            for i in range(0, comb_len):
+                cost += comb[0][i]["cost_per_share"]
+                profit += comb[0][i]["profit_value"]
+            if cost <= budget:
+                if profit > best_profit:
+                    best_profit = profit
+                    best_comb[0] = comb[0]
     else:
         for comb in combs:
             comb_len = len(comb)
@@ -113,8 +116,7 @@ if __name__ == "__main__":
     shares_dict = csv_to_dict(CSV_FILE)
     shares = append_profit_value(shares_dict)
     results = shares_combinations(shares, MAX_COST)
-    print(results)
-    """results_len = len(results[0])
+    results_len = len(results[0])
     print("\nBest combination is:\n")
     cost = 0
     profit = 0
@@ -123,4 +125,4 @@ if __name__ == "__main__":
         profit += results[0][i]["profit_value"]
         print(f"{results[0][i]['shares']}")
     print(f"\nTotal cost: {cost}\n")
-    print(f"Total profit: {profit}\n")"""
+    print(f"Total profit: {profit}\n")
