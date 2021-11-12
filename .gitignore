@@ -137,5 +137,11 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
-# vscode workspace
-# *.code-workspace
+# vscode
+.vscode/
+
+# pytest
+tests/
+
+# pip update all win
+pipupdate.ps1
