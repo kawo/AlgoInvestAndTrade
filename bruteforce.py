@@ -1,7 +1,7 @@
 import csv
 import itertools
 import timeit
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Union
 
 CSV_FILE = "csv/shares.csv"
 MAX_COST = 500
@@ -42,9 +42,7 @@ def append_profit_value(shares: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     return shares
 
 
-def find_best_comb(
-    combs: List[Dict[str, Any]], budget: int, final: bool = False
-) -> List[str]:
+def find_best_comb(combs: List[Dict[int, Any]], budget: int, final: bool = False):
     """Find best comb within budget and with max profit
 
     Args:
@@ -55,7 +53,7 @@ def find_best_comb(
     Returns:
         List[str]: return the best combination
     """
-    best_comb = ["temp"]
+    best_comb: List[Any] = ["temp"]
     best_profit = 0
     final = final
     if final:
@@ -101,10 +99,10 @@ def shares_combinations(shares: List[Dict[str, Any]], budget: int) -> List[str]:
     best_comb = []
     for i in range(1, (shares_len + 1)):
         combs = itertools.combinations(shares, i)
-        best_combs.append(find_best_comb(combs, budget))
+        best_combs.append(find_best_comb(combs, budget))  # type: ignore
     best_combs = list(filter(None, best_combs))
     best_comb = find_best_comb(best_combs, budget, True)
-    return best_comb
+    return best_comb  # type: ignore
 
 
 def comb_time():
@@ -134,14 +132,14 @@ if __name__ == "__main__":
 
     shares_dict = csv_to_dict(CSV_FILE)
     shares = append_profit_value(shares_dict)
-    results = shares_combinations(shares, MAX_COST)
-    results_len = len(results[0])
+    results: Union[int, Any] = shares_combinations(shares, MAX_COST)
+    results_len = len(results[0])  # type: ignore
     print("\nBest combination is:\n")
-    cost = 0
-    profit = 0
+    cost: int = 0
+    profit: float = 0
     for i in range(0, results_len):
-        cost += results[0][i]["cost_per_share"]
-        profit += results[0][i]["profit_value"]
-        print(f"{results[0][i]['shares']}")
+        cost += results[0][i]["cost_per_share"]  # type: ignore
+        profit += results[0][i]["profit_value"]  # type: ignore
+        print(f"{results[0][i]['shares']}")  # type: ignore
     print(f"\nTotal cost: {cost}\n")
     print(f"Total profit: {profit / 100}\n")
