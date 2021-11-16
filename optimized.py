@@ -84,16 +84,17 @@ from __main__ import append_profit_value
 from __main__ import knapsack
 import csv
 from typing import Any, Dict, List
-SHARES_FILE = "csv/shares.csv"
-shares = append_profit_value(csv_to_dict(SHARES_FILE))
-share_cost = []
-share_value = []
-for share in shares:
-    share_cost.append(share["cost_per_share"])
-    share_value.append(share["profit_value"])
-budget = 500"""
+BUDGET = 500
+DATASET1 = "csv/dataset1_Python+P7.csv"
+dataset1 = csv_to_dict(DATASET1)
+dataset1_cost = []
+dataset1_value = []
+for data in dataset1:
+    if (float(data["price"]) > 0) and (float(data["profit"]) > 0):
+        dataset1_cost.append(int(float(data["price"]) * 100))
+        dataset1_value.append(int(float(data["price"]) * float(data["profit"])))"""
     TEST_CODE = """
-knapsack(budget, share_cost, share_value)"""
+knapsack(BUDGET * 100, dataset1_cost, dataset1_value)"""
 
     times = timeit.timeit(stmt=TEST_CODE, setup=SETUP_CODE, number=1)
 
@@ -104,7 +105,7 @@ if __name__ == "__main__":
 
     # knapsack_time()
 
-    """shares = append_profit_value(csv_to_dict(SHARES_FILE))
+    shares = append_profit_value(csv_to_dict(SHARES_FILE))
 
     share_cost = []
     share_value = []
@@ -112,7 +113,7 @@ if __name__ == "__main__":
         share_cost.append(share["cost_per_share"])
         share_value.append(share["profit_value"])
 
-    print(f"\n{knapsack(BUDGET, share_cost, share_value)}\n")"""
+    print(f"\nshares.csv profit: {knapsack(BUDGET, share_cost, share_value)}")
 
     dataset1 = csv_to_dict(DATASET1)
     dataset1_cost = []
@@ -120,7 +121,7 @@ if __name__ == "__main__":
     for data in dataset1:
         if (float(data["price"]) > 0) and (float(data["profit"]) > 0):
             dataset1_cost.append(int(float(data["price"]) * 100))
-            dataset1_value.append(int(float(data["profit"]) * 100))
+            dataset1_value.append(int(float(data["price"]) * float(data["profit"])))
 
     dataset2 = csv_to_dict(DATASET2)
     dataset2_cost = []
@@ -128,8 +129,10 @@ if __name__ == "__main__":
     for data in dataset2:
         if (float(data["price"]) > 0) and (float(data["profit"]) > 0):
             dataset2_cost.append(int(float(data["price"]) * 100))
-            dataset2_value.append(int(float(data["profit"]) * 100))
+            dataset2_value.append(int(float(data["price"]) * float(data["profit"])))
 
-    print(f"\n{knapsack(BUDGET * 100, dataset1_cost, dataset1_value)}\n")
+    print(f"\ndataset1 profit: {knapsack(BUDGET * 100, dataset1_cost, dataset1_value)}")
 
-    print(f"\n{knapsack(BUDGET * 100, dataset2_cost, dataset2_value)}\n")
+    print(
+        f"\ndataset2 profit: {knapsack(BUDGET * 100, dataset2_cost, dataset2_value)}\n"
+    )
