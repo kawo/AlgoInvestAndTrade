@@ -74,7 +74,21 @@ def knapsack(budget: int, share_cost, share_value):
                 )
             else:
                 bag[i][j] = bag[i - 1][j]
-    return bag[n][budget] / 100
+
+    shares = []
+    bag_size = budget
+    bag_res = bag[n][budget]
+    for i in range(n, 0, -1):
+        if bag_res <= 0:
+            break
+        if bag_res == bag[i - 1][bag_size]:
+            continue
+        else:
+            shares.append(share_cost[i - 1])
+            bag_res = bag_res - share_value[i - 1]
+            bag_size = bag_size - share_cost[i - 1]
+
+    return bag[n][budget] / 100, shares
 
 
 def knapsack_time():
@@ -113,7 +127,15 @@ if __name__ == "__main__":
         share_cost.append(share["cost_per_share"])
         share_value.append(share["profit_value"])
 
-    print(f"\nshares.csv profit: {knapsack(BUDGET, share_cost, share_value)}")
+    shares_profit, shares_result = knapsack(BUDGET, share_cost, share_value)
+
+    print(f"\n>shares.csv...\n\nProfit: {shares_profit}")
+    print(f"Total cost: {sum(shares_result)}")
+    print("\nActions chosen:")
+    for result in shares_result:
+        for i in range(len(shares)):
+            if shares[i]["cost_per_share"] == result:
+                print(f"{shares[i]['shares']} ({result} €)")
 
     dataset1 = csv_to_dict(DATASET1)
     dataset1_cost = []
@@ -123,6 +145,20 @@ if __name__ == "__main__":
             dataset1_cost.append(int(float(data["price"]) * 100))
             dataset1_value.append(int(float(data["price"]) * float(data["profit"])))
 
+    print("\n>dataset1...")
+
+    dataset1_profit, dataset1_result = knapsack(
+        BUDGET * 100, dataset1_cost, dataset1_value
+    )
+
+    print(f"\nProfit: {dataset1_profit}")
+    print(f"Total cost: {sum(dataset1_result) / 100}")
+    print("\nActions chosen:")
+    for result in dataset1_result:
+        for i in range(len(dataset1)):
+            if (int(float(dataset1[i]["price"]) * 100)) == result:
+                print(f"{dataset1[i]['name']} ({result / 100} €)")
+
     dataset2 = csv_to_dict(DATASET2)
     dataset2_cost = []
     dataset2_value = []
@@ -131,8 +167,18 @@ if __name__ == "__main__":
             dataset2_cost.append(int(float(data["price"]) * 100))
             dataset2_value.append(int(float(data["price"]) * float(data["profit"])))
 
-    print(f"\ndataset1 profit: {knapsack(BUDGET * 100, dataset1_cost, dataset1_value)}")
+    print("\n>dataset2...")
 
-    print(
-        f"\ndataset2 profit: {knapsack(BUDGET * 100, dataset2_cost, dataset2_value)}\n"
+    dataset2_profit, dataset2_result = knapsack(
+        BUDGET * 100, dataset2_cost, dataset2_value
     )
+
+    print(f"\nProfit: {dataset2_profit}")
+    print(f"Total cost: {sum(dataset2_result) / 100}")
+    print("\nActions chosen:")
+    for result in dataset2_result:
+        for i in range(len(dataset2)):
+            if (int(float(dataset2[i]["price"]) * 100)) == result:
+                print(f"{dataset2[i]['name']} ({result / 100} €)")
+
+    print("")
