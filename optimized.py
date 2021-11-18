@@ -102,9 +102,7 @@ def knapsack(budget: int, share_cost, share_value):
     return bag[n][budget] / 100, shares
 
 
-def dataset_results(
-    dataset: List[Dict[str, Any]], data_profit: List[float], data_result: List[float]
-):
+def dataset_results(dataset: List[Dict[str, Any]], data_profit, data_result):
     """Show dataset results
 
     Args:
