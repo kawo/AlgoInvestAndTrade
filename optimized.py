@@ -72,6 +72,10 @@ def knapsack(budget: int, share_cost, share_value):
     Returns:
         bag: last cell with the best profit
     """
+
+    # First we craft the "knapsack" (bag) with the budget as columns
+    # then we place goods (shares) which fit the weight (share_cost <= cell budget)
+    # for each cell with the best value (share_value) and so on
     n = len(share_value)
     bag = [[0 for x in range(budget + 1)] for x in range(n + 1)]
     for i in range(n + 1):
@@ -85,7 +89,10 @@ def knapsack(budget: int, share_cost, share_value):
                 )
             else:
                 bag[i][j] = bag[i - 1][j]
-
+    # To retrieve the goods (shares) chosen for the best weight/value
+    # we iterate in reverse from the last cell and guess if the
+    # previous cell is either the result of a sum or a value
+    # already calculated
     shares = []
     bag_size = budget
     bag_res = bag[n][budget]
@@ -98,7 +105,8 @@ def knapsack(budget: int, share_cost, share_value):
             shares.append(share_cost[i - 1])
             bag_res = bag_res - share_value[i - 1]
             bag_size = bag_size - share_cost[i - 1]
-
+    # At last, we return the last cell (divided by 100 because we worked in cents)
+    # and the list with all chosen shares
     return bag[n][budget] / 100, shares
 
 
@@ -122,7 +130,41 @@ def dataset_results(dataset: List[Dict[str, Any]], data_profit, data_result):
                 print(f"{dataset[i]['name']} ({result / 100} €)")
 
 
-def knapsack_time():
+def shares_time():
+    SETUP_CODE = """
+from __main__ import csv_to_dict
+from __main__ import append_profit_value
+from __main__ import knapsack
+import csv
+from typing import Any, Dict, List
+BUDGET = 500
+SHARES_FILE = "csv/shares.csv"
+shares = append_profit_value(csv_to_dict(SHARES_FILE))
+share_cost = []
+share_value = []
+for share in shares:
+    share_cost.append(share["cost_per_share"])
+    share_value.append(share["profit_value"])"""
+    TEST_CODE = """
+shares_profit, shares_result = knapsack(BUDGET, share_cost, share_value)
+print("")
+print(">shares.csv...")
+print("")
+print("Profit:", shares_profit, "€")
+print("Total cost:", sum(shares_result), "€")
+print("")
+print("Actions chosen:")
+for result in shares_result:
+    for i in range(len(shares)):
+        if shares[i]["cost_per_share"] == result:
+            print(shares[i]['shares'], result, "€")"""
+
+    times = timeit.timeit(stmt=TEST_CODE, setup=SETUP_CODE, number=1)
+
+    return print(f"\n- shares calc time: {times}s -\n")
+
+
+def dataset1_time():
     SETUP_CODE = """
 from __main__ import csv_to_dict
 from __main__ import dataset_to_centimes
@@ -133,60 +175,44 @@ from typing import Any, Dict, List
 BUDGET = 500
 DATASET1 = "csv/dataset1_Python+P7.csv"
 dataset1 = csv_to_dict(DATASET1)
-dataset1_cost, dataset1_value = dataset_to_centimes(dataset1)"""
+dataset1_cost, dataset1_value = dataset_to_centimes(dataset1)
+print(">dataset1...")"""
     TEST_CODE = """
 dataset1_profit, dataset1_result = knapsack(BUDGET * 100, dataset1_cost, dataset1_value)
 dataset_results(dataset1, dataset1_profit, dataset1_result)"""
 
     times = timeit.timeit(stmt=TEST_CODE, setup=SETUP_CODE, number=1)
 
-    return print(f"\nKnapsack calc time: {times}s\n")
+    return print(f"\n- dataset1 calc time: {times}s -\n")
+
+
+def dataset2_time():
+    SETUP_CODE = """
+from __main__ import csv_to_dict
+from __main__ import dataset_to_centimes
+from __main__ import dataset_results
+from __main__ import knapsack
+import csv
+from typing import Any, Dict, List
+BUDGET = 500
+DATASET2 = "csv/dataset2_Python+P7.csv"
+dataset2 = csv_to_dict(DATASET2)
+dataset2_cost, dataset2_value = dataset_to_centimes(dataset2)
+print(">dataset2...")"""
+    TEST_CODE = """
+dataset2_profit, dataset2_result = knapsack(BUDGET * 100, dataset2_cost, dataset2_value)
+dataset_results(dataset2, dataset2_profit, dataset2_result)"""
+
+    times = timeit.timeit(stmt=TEST_CODE, setup=SETUP_CODE, number=1)
+
+    return print(f"\n- dataset2 calc time: {times}s -\n")
 
 
 if __name__ == "__main__":
 
-    # uncomment this to show time calculation
-    # of knapsack algorithm to dataset1
     #
-    # knapsack_time()
-
+    # Time calculation for knapsack algorithm on all datasets
     #
-    # applying knapsack algorithm to the initial csv of 20 actions
-    #
-    shares = append_profit_value(csv_to_dict(SHARES_FILE))
-    share_cost = []
-    share_value = []
-    for share in shares:
-        share_cost.append(share["cost_per_share"])
-        share_value.append(share["profit_value"])
-    shares_profit, shares_result = knapsack(BUDGET, share_cost, share_value)
-    print(f"\n>shares.csv...\n\nProfit: {shares_profit} €")
-    print(f"Total cost: {sum(shares_result)} €")
-    print("\nActions chosen:")
-    for result in shares_result:
-        for i in range(len(shares)):
-            if shares[i]["cost_per_share"] == result:
-                print(f"{shares[i]['shares']} ({result} €)")
-
-    #
-    # applying knapsack algorithm to dataset1
-    #
-    dataset1 = csv_to_dict(DATASET1)
-    dataset1_cost, dataset1_value = dataset_to_centimes(dataset1)
-    print("\n>dataset1...")
-    dataset1_profit, dataset1_result = knapsack(
-        BUDGET * 100, dataset1_cost, dataset1_value
-    )
-    dataset_results(dataset1, dataset1_profit, dataset1_result)
-
-    #
-    # applying knapsack algorithm to dataset2
-    #
-    dataset2 = csv_to_dict(DATASET2)
-    dataset2_cost, dataset2_value = dataset_to_centimes(dataset2)
-    print("\n>dataset2...")
-    dataset2_profit, dataset2_result = knapsack(
-        BUDGET * 100, dataset2_cost, dataset2_value
-    )
-    dataset_results(dataset2, dataset2_profit, dataset2_result)
-    print("")
+    shares_time()
+    dataset1_time()
+    dataset2_time()
