@@ -1,7 +1,7 @@
 import csv
 import itertools
 import timeit
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List
 
 CSV_FILE = "csv/shares.csv"
 MAX_COST = 500
@@ -113,33 +113,31 @@ from __main__ import find_best_comb
 from __main__ import shares_combinations
 import csv
 import itertools
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Union
 CSV_FILE = "csv/shares.csv"
 MAX_COST = 500
 shares_dict = csv_to_dict(CSV_FILE)
 shares = append_profit_value(shares_dict)"""
     TEST_CODE = """
-shares_combinations(shares, MAX_COST)"""
+results: Union[int, Any] = shares_combinations(shares, MAX_COST)
+results_len = len(results[0])
+print("")
+print("Best combination is:")
+cost: int = 0
+profit: float = 0
+for i in range(0, results_len):
+    cost += results[0][i]["cost_per_share"]
+    profit += results[0][i]["profit_value"]
+    print(f"{results[0][i]['shares']}")
+print("")
+print("Total cost:", cost, "€")
+print("Total profit:", profit / 100, "€")"""
 
     times = timeit.timeit(stmt=TEST_CODE, setup=SETUP_CODE, number=1)
 
-    return print(f"\nCombs calc time: {times}s")
+    return print(f"\n- combs calc time: {times}s -\n")
 
 
 if __name__ == "__main__":
 
     comb_time()
-
-    shares_dict = csv_to_dict(CSV_FILE)
-    shares = append_profit_value(shares_dict)
-    results: Union[int, Any] = shares_combinations(shares, MAX_COST)
-    results_len = len(results[0])  # type: ignore
-    print("\nBest combination is:\n")
-    cost: int = 0
-    profit: float = 0
-    for i in range(0, results_len):
-        cost += results[0][i]["cost_per_share"]  # type: ignore
-        profit += results[0][i]["profit_value"]  # type: ignore
-        print(f"{results[0][i]['shares']}")  # type: ignore
-    print(f"\nTotal cost: {cost}\n")
-    print(f"Total profit: {profit / 100}\n")
