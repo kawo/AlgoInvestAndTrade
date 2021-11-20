@@ -1,0 +1,17 @@
+
+Best combination is:
+Action-4
+Action-5
+Action-6
+Action-8
+Action-10
+Action-11
+Action-13
+Action-18
+Action-19
+Action-20
+
+Total cost: 498 €
+Total profit: 99.08 €
+
+- combs calc time: 1.7367816s -

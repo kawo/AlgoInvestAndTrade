@@ -1,0 +1,87 @@
+
+>shares.csv...
+
+Profit: 99.08 €
+Total cost: 498 €
+
+Actions chosen:
+Action-20 114 €
+Action-19 24 €
+Action-18 10 €
+Action-13 38 €
+Action-11 42 €
+Action-10 34 €
+Action-8 26 €
+Action-6 80 €
+Action-5 60 €
+Action-4 70 €
+
+- shares calc time: 0.0033209000000000016s -
+
+>dataset1...
+
+Profit: 198.44 €
+Total cost: 499.94 €
+
+Actions chosen:
+Share-KMTG (23.21 €)
+Share-GHIZ (28.0 €)
+Share-NHWA (29.18 €)
+Share-SKKC (24.87 €)
+Share-UEZB (24.87 €)
+Share-SXZH (39.35 €)
+Share-LPDM (39.35 €)
+Share-MTLR (16.48 €)
+Share-TZIJ (25.62 €)
+Share-USSR (25.62 €)
+Share-GTQK (15.4 €)
+Share-FKJW (21.08 €)
+Share-QLMK (17.38 €)
+Share-ZQDO (34.64 €)
+Share-WPLI (34.64 €)
+Share-LGWG (31.41 €)
+Share-ZSDE (15.11 €)
+Share-SKKC (24.87 €)
+Share-UEZB (24.87 €)
+Share-QQTU (33.19 €)
+Share-GIAJ (10.75 €)
+Share-TVOJ (9.39 €)
+Share-XJMO (9.39 €)
+Share-INSV (32.9 €)
+Share-LRBZ (32.9 €)
+Share-KZBL (28.99 €)
+Share-EMOV (8.89 €)
+Share-IFCP (29.23 €)
+Share-OTFE (29.23 €)
+
+- dataset1 calc time: 19.9522113s -
+
+>dataset2...
+
+Profit: 197.89 €
+Total cost: 499.9 €
+
+Actions chosen:
+Share-ECAQ (31.66 €)
+Share-IXCI (26.32 €)
+Share-FWBE (18.3 €)
+Share-ZOFA (25.32 €)
+Share-PLLK (19.94 €)
+Share-LXZU (4.24 €)
+Share-YFVZ (22.55 €)
+Share-ANFX (38.54 €)
+Share-PATS (27.7 €)
+Share-SCWM (6.42 €)
+Share-NDKR (33.06 €)
+Share-ALIY (29.08 €)
+Share-JWGF (48.69 €)
+Share-JGTW (35.29 €)
+Share-FAPS (32.57 €)
+Share-KGMP (32.57 €)
+Share-VCAX (27.42 €)
+Share-LFXB (14.83 €)
+Share-DWSK (29.49 €)
+Share-XQII (13.42 €)
+Share-ROOM (15.06 €)
+
+- dataset2 calc time: 9.868336499999998s -
